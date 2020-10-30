@@ -1,0 +1,25 @@
+[package]
+name = "executor"
+version = "0.1.0"
+authors = ["Attilus Leung <attilusleung@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+futures = "*"
+tokio = { version = "0.2.22", features = ["rt-threaded", "macros", "process", "time"] }
+warp = "*"
+tokio-test = "*"
+serde_json = { version="1.0" }
+serde = { version = "*", features = ["derive"] }
+pretty_env_logger = "*"
+log = "*"
+toml = "*"
+lazy_static = "*"
+handlebars = "*"
+bytes = "*"
+anyhow = "1.0.33"
+lru = "*"
+cfg-if = "1.0.0"
+async-trait = "0.1.41"

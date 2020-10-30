@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $(".button").click(function() {
+        var handle = $(this).attr('id').slice(7);
+        $("#result-"+handle).html("Running...");
+        var language = $("#language-" + handle).val();
+        $.post("http://localhost:8080/run/" + language + "/" + handle,
+          $("#code-"+handle).val(),
+          function(data, status) {
+            var obj = JSON.parse(data);
+            console.log(obj.msg);
+            $("#result-"+handle).html(obj.msg);
+          })
+        });
+      $(".language").change(function() {
+        var handle = $(this).attr('id').slice(9);
+        var language = $(this).val();
+        $.get("http://localhost:8080/boilerplate/" + handle + "/" + language,
+          function(data, status) {
+            $("#code-" + handle).html(data);
+          })
+      });
+    });
+  </script>
+  <title>Test</title>
+</head>
+<body>
+  {{#each questions}}
+  <p>
+  {{this.prompt}}
+  </p>
+  <!-- <br/> -->
+  <select id="language-{{this.handle}}" class="language">
+    <option value="python" selected="selected">Python</option>
+    <option value="java">Java</option>
+  </select>
+  </br>
+  <textarea id="code-{{this.handle}}" name="code" class="code" cols="80" rows="10">
+{{this.python.boilerplate}}</textarea>
+  <br/>
+  <button id="button-{{this.handle}}" class="button">Please work</button>
+  <pre id="result-{{this.handle}}" name="result">Your test output will be shown here</pre>
+  <br/>
+  {{/each}}
+</body>
+</html>
