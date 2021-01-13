@@ -8,6 +8,8 @@ def make_test(func):
     ret = json.loads("\n".join(program).strip())
     return ret["code"] + f"\nresult = {func}(*args)" , eval(ret["test_case"])
 
+# TODO: It's unlikely that someone would make a function called `make_test`,
+# but probably want to not include `test` in global vars
 def test(program, test_case):
     import sys
     for args, expect in test_case:

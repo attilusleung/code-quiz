@@ -12,6 +12,7 @@ pub struct DockerID {
 
 impl Drop for DockerID {
     fn drop(&mut self) {
+        println!("Killing {:?}", self);
         kill_container(&self.id);
     }
 }
@@ -36,6 +37,7 @@ fn gen_args<'a>(image_name: &'a str, command: impl IntoIterator<Item=&'a str>, e
 }
 
 
+// This creates dangling containers if the command times out.
 pub async fn exec_in_container<'a>(
     image_name: &'a str,
     command: impl IntoIterator<Item=&'a str>,
@@ -53,6 +55,24 @@ pub async fn exec_in_container<'a>(
         stdin
     ).await
 }
+
+
+pub async fn exec_in_dangling_container(
+    image_name: &str,
+    command: impl IntoIterator<Item=&str>,
+    time: Duration,
+    root: bool,
+    stdin: Option<&str>,
+    readonly: bool
+)
+-> Result<CodeExec, anyhow::Error>
+{
+    let container = dangling_container(image_name, vec!["sh"], Duration::from_secs(2), None, readonly).await?;
+
+    let ret = run_in_container(&container, command.into_iter().collect::<Vec<&str>>(), time, root, stdin).await?;
+    Ok(ret)
+}
+
 
 pub async fn dangling_container<'a>(
     image_name: &'a str,

@@ -22,7 +22,7 @@
         var language = $(this).val();
         $.get("http://localhost:8080/boilerplate/" + handle + "/" + language,
           function(data, status) {
-            $("#code-" + handle).html(data);
+            $("#code-" + handle).val(data);
           })
       });
     });

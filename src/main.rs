@@ -168,7 +168,11 @@ async fn main() {
         .and(warp::path("boilerplate"))
         .and(warp::path::param::<String>())
         .and(warp::path::param::<String>())
-        .and_then(get_boilerplate);
+        .and_then(get_boilerplate)
+        .with(
+            // Probably want to make this not *
+            warp::reply::with::default_header("Access-Control-Allow-Origin", "*")
+        );
 
     let router = run.or(get_boilerplate).or(page);
     warp::serve(router).run(([127, 0, 0, 1], 8080)).await;

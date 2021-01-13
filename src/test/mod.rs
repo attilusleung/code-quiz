@@ -1,7 +1,7 @@
 use crate::exec::CodeExec;
 use crate::exec::python::exec_python;
 use crate::exec::java::exec_java_in_container;
-use crate::exec::docker::exec_in_container;
+use crate::exec::docker::exec_in_dangling_container;
 use serde::Serialize;
 use std::time::Duration;
 
@@ -47,7 +47,7 @@ pub async fn test_python_in_container(code: &str, func_name: &str, test_case: &s
 
     // TODO: Read test file from config
     // TODO: Generate everything from test file
-    match exec_in_container("test", vec!["python", "./test.py", func_name], time, Some(&input), true).await {
+    match exec_in_dangling_container("test", vec!["python", "./test.py", func_name], time, Some(&input), true).await {
         Ok(CodeExec::Executed(Some(0), stdout, _)) => gen_reply(true, &stdout),
         Ok(CodeExec::Executed(Some(1), _, stderr)) => gen_reply(false, &stderr),
         Ok(CodeExec::Executed(Some(2), stdout, _)) => gen_reply(false, &stdout),

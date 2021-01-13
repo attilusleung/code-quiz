@@ -3,6 +3,7 @@ use lazy_static::lazy_static;
 use std::collections::HashMap;
 
 // TODO: Mock out the entire config for tests
+// TODO: Preserve order in parsing config
 
 lazy_static!{
     pub static ref CONFIG: Config = {
